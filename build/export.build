@@ -1,0 +1,6 @@
+$out_root/
+{
+  include Eigen/
+}
+
+export $out_root/Eigen/$import.target

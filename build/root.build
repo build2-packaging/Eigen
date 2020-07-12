@@ -1,0 +1,7 @@
+cxx.std = latest
+
+using cxx
+
+test.target = $cxx.target
+
+src_upstream = $src_root/upstream

@@ -1,0 +1,3 @@
+import libs = Eigen%lib{Eigen}
+
+./: exe{main}: cxx{main} $libs
