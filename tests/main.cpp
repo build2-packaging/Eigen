@@ -1,3 +1,7 @@
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wdeprecated"
+#endif
+
 #include <Eigen/Dense>
 #include <iostream>
 
