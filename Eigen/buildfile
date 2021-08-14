@@ -1,9 +1,0 @@
-lib{Eigen}: $src_upstream/Eigen/hxx{**. -*.txt.}
-{
-  cxx.export.poptions =+ "-I$src_upstream"
-}
-
-../upstream/
-{
-  hxx{*}: install.subdirs = true
-}

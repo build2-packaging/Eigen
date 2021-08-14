@@ -1,6 +1,6 @@
 $out_root/
 {
-  include Eigen/
+  include ./
 }
 
-export $out_root/Eigen/$import.target
+export $out_root/$import.target

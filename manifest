@@ -1,12 +1,13 @@
 : 1
 name: Eigen
-version: 3.3.8
+version: 3.3.9
 summary: Eigen is a C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
 license: MPLv2, LGPLv2.1, BSD2
 license: MPLv2, LGPLv2.1
 license: MPLv2
 
-description-file: upstream/README.md
+description-file: UPSTREAM.README.md
+
 url: http://eigen.tuxfamily.org/
 src-url: https://gitlab.com/libeigen/eigen
 package-url: https://github.com/build2-packaging/eigen

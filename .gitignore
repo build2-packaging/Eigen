@@ -12,7 +12,7 @@
 !export.build
 !manifest
 
-!README.md
+!*.md
+!COPYING*
 
-!.gitignore
-!.gitmodules
+!.git*
