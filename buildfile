@@ -1,4 +1,4 @@
-./: lib{Eigen}: Eigen/hxx{**. -*.txt.}
+./: lib{Eigen}: Eigen/hxx{**. **.h}
 {
   cxx.export.poptions =+ "-I$src_root"
 }
