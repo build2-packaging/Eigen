@@ -8,6 +8,12 @@
 </p>
 
 <p align="center">
+    <a href="https://eigen.tuxfamily.org/index.php">
+        <img src="https://img.shields.io/website/https/eigen.tuxfamily.org/index.php.svg?down_message=offline&label=Official&style=for-the-badge&up_color=blue&up_message=online">
+    </a>
+    <a href="https://github.com/build2-packaging/Eigen">
+        <img src="https://img.shields.io/website/https/github.com/build2-packaging/Eigen.svg?down_message=offline&label=build2&style=for-the-badge&up_color=blue&up_message=online">
+    </a>
     <a href="https://cppget.org/Eigen">
         <img src="https://img.shields.io/website/https/cppget.org/Eigen.svg?down_message=offline&label=cppget.org&style=for-the-badge&up_color=blue&up_message=online">
     </a>
@@ -15,6 +21,30 @@
         <img src="https://img.shields.io/website/https/queue.cppget.org/Eigen.svg?down_message=empty&down_color=blue&label=queue.cppget.org&style=for-the-badge&up_color=orange&up_message=running">
     </a>
 </p>
+
+## Usage
+Make sure to add the stable `cppget.org` repositories to your project's `repositories.manifest` to be able to fetch the packages.
+
+    :
+    role: prerequisite
+    location: https://pkg.cppget.org/1/stable
+    # trust: ...
+
+Add the respective dependency in your project's `manifest` file to make the package available for import.
+
+    depends: Eigen ^ 3.4.0
+
+The header-only C++ library to use Eigen can be imported by the following declaration in a `buildfile`.
+
+    import Eigen = Eigen%lib{Eigen}
+
+## Configuration
+
+### Unsupported Modules
+The unsupported modules of the Eigen library can be enabled by setting the following configuration variable to `true`.
+In this case, the path to unsupported header files is automatically added to the include directories such that unsupported may be used as if they were supported Eigen modules.
+
+    config [bool] config.Eigen.unsupported ?= false
 
 ## Contributing
 Thanks in advance for your help and contribution to keep this package up-to-date.
