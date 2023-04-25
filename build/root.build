@@ -1,4 +1,15 @@
 cxx.std = latest
 using cxx
 
+# Eigen is configurable from the outside by macros.
+# Hence, we assume headers to be not importable.
+#
+hxx{*}: cxx.importable = false
+
+# The test target for cross-testing (running tests under Wine, etc).
+#
 test.target = $cxx.target
+
+# Configuration
+#
+config [bool] config.Eigen.unsupported ?= false

@@ -1,2 +1,5 @@
 import libs = Eigen%lib{Eigen}
 ./: exe{main}: cxx{main} $libs
+
+exe{tensor}: cxx{tensor} $libs
+./: exe{tensor}: include = $config.Eigen.unsupported
