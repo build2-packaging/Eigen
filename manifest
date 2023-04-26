@@ -6,7 +6,12 @@ license: MPLv2, LGPLv2.1, BSD2
 license: MPLv2, LGPLv2.1
 license: MPLv2
 
-description-file: UPSTREAM.README.md
+# As the 'README.md' describes how to use the build2 package,
+# the description file should be this one
+# and not the official README.
+#
+description-file: README.md
+# description-file: UPSTREAM.README.md
 
 url: http://eigen.tuxfamily.org/
 src-url: https://gitlab.com/libeigen/eigen
