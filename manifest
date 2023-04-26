@@ -18,7 +18,7 @@ src-url: https://gitlab.com/libeigen/eigen
 package-url: https://github.com/build2-packaging/eigen
 email: eigen@lists.tuxfamily.org
 package-email: lyrahgames@mailbox.org
-build-warning-email: lyrahgames@mailbox.org
+build-error-email: lyrahgames@mailbox.org
 
 depends: * build2 >= 0.15.0
 depends: * bpkg >= 0.15.0
