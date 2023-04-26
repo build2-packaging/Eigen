@@ -1,16 +1,26 @@
-# Eigen library
+# Eigen Library
+# The relative include paths of the unsupported modules
+# need to be kept valid and they should not pollute
+# the system's include folder with an 'unsupported' directory.
+# So, the Eigen library and the unsupported Eigen modules will
+# both be put in another directory 'Eigen'
+# in the system's include folder when installed.
 #
 ./: lib{Eigen}: Eigen/hxx{**. **.h}
 {
   cxx.export.poptions =+ "-I$src_root"
-  cxx.pkgconfig.include = include/
+  cxx.pkgconfig.include = include/Eigen/
+}
+#
+cxx.poptions =+ "-I$src_root"
+#
+Eigen/hxx{*}:
+{
+  install = include/Eigen/Eigen/
+  install.subdirs = true
 }
 
-cxx.poptions =+ "-I$src_root"
-
-hxx{*}: install.subdirs = true
-
-# Add unsupported header files when needed
+# Add unsupported modules when enabled.
 #
 lib{Eigen}: unsupported/Eigen/hxx{**. **.h}: include = $config.Eigen.unsupported
 #
@@ -30,6 +40,8 @@ unsupported/hxx{*}:
   install.subdirs = true
 }
 
+# Run some custom tests.
+#
 ./: tests/ manifest legal{COPYING*}
 tests/: install = false
 
