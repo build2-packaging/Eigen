@@ -8,6 +8,9 @@
 #
 ./: lib{Eigen}: Eigen/hxx{**. **.h}
 {
+  export.metadata = 1 Eigen
+  Eigen.unsupported = [bool] $config.Eigen.unsupported
+
   cxx.export.poptions =+ "-I$src_root"
   cxx.pkgconfig.include = include/Eigen/
 }

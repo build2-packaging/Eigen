@@ -1,5 +1,9 @@
-import libs = Eigen%lib{Eigen}
-./: exe{main}: cxx{main} $libs
+import! [metadata, rule_hint=cxx.link] lib = Eigen%lib{Eigen}
 
-exe{tensor}: cxx{tensor} $libs
-./: exe{tensor}: include = $config.Eigen.unsupported
+./: exe{main}: cxx{main} $lib
+
+# Only run this test when the Eigen library has
+# been configured to provide its unsupported modules.
+#
+exe{tensor}: cxx{tensor} $lib
+./: exe{tensor}: include = $($lib: Eigen.unsupported)
