@@ -1,0 +1,15 @@
+# These tests require the C++11 standard.
+#
+cxx.std = 11
+
+using cxx
+
+hxx{*}: extension = h
+cxx{*}: extension = cpp
+
+exe{*}: test = true
+
+test.target = $cxx.target
+
+import! [metadata, rule_hint=cxx.link] Eigen = Eigen%lib{Eigen}
+unsupported_modules = $($Eigen: Eigen.unsupported)

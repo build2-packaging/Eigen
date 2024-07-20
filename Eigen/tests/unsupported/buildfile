@@ -1,0 +1,29 @@
+# Test Headers from Standard Unit Tests
+#
+main = [dir_path] ../Eigen/
+include $main
+headers = $($main/ headers)
+
+# Capture all unit test sources that don't
+# require C++11 or external dependencies.
+#
+unittests = test/cxx{*\
+  -cxx11* \
+  -forward_adolc \
+  -mpreal_support \
+  -openglsupport \
+  -sparse_extra}
+
+# Create test executable for each unit test source.
+#
+for x: $unittests
+{
+  n = $name($x)
+  ./: exe{$n}: $x test/hxx{*} $main/{$headers} $Eigen testscript
+}
+
+# Add required build options to make tests
+# compilable and execute every available test case.
+#
+cxx.poptions =+ "-I$src_root/Eigen/test"
+cxx.poptions += -DEIGEN_TEST_MAX_SIZE=320 -DEIGEN_TEST_PART_2 -DDEIGEN_TEST_PART_ALL

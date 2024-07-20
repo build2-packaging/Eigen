@@ -1,0 +1,23 @@
+: 1
+name: Eigen
+version: 3.4.0+4
+type: lib,binless
+language: c++
+summary: C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms
+license: MPLv2, LGPLv2.1, BSD2
+license: MPLv2, LGPLv2.1
+license: MPLv2
+
+description-file: README.md
+url: http://eigen.tuxfamily.org/
+src-url: https://gitlab.com/libeigen/eigen
+email: eigen@lists.tuxfamily.org
+
+package-description-file: PACKAGE-README.md
+package-url: https://github.com/build2-packaging/eigen
+package-email: packaging@build2.org
+
+depends: * build2 >= 0.17.0
+depends: * bpkg >= 0.17.0
+
+unsupported-build-config: config.Eigen.unsupported=true

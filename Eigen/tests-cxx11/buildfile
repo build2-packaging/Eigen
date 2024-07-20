@@ -1,0 +1,10 @@
+# Tests for Eigen's supported modules do not require C++11 standard.
+# However, the test directory is still needed for the headers
+# that are required to compile all tests for Eigen's unsupported modules.
+#
+./: Eigen/
+
+# Run tests for unsupported modules only if package
+# was configured to make unsupported modules available.
+#
+./: unsupported/: include = $unsupported_modules

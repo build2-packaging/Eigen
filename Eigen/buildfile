@@ -1,0 +1,3 @@
+./: {*/ -build/} manifest legal{COPYING*} doc{*.md}
+tests/: install = false
+tests-cxx11/: install = false

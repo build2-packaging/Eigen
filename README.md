@@ -1,26 +1,11 @@
-<h1 align="center">
-    build2 Package for Eigen
-</h1>
+# build2 Package for Eigen
 
-<p align="center">
-    This project builds and defines the build2 package for Eigen.
-    Eigen is a C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
-</p>
+This project is a [build2](https://build2.org) package repository that provides access to [Eigen](https://eigen.tuxfamily.org/index.php), a C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
 
-<p align="center">
-    <a href="https://eigen.tuxfamily.org/index.php">
-        <img src="https://img.shields.io/website/https/eigen.tuxfamily.org/index.php.svg?down_message=offline&label=Official&style=for-the-badge&up_color=blue&up_message=online">
-    </a>
-    <a href="https://github.com/build2-packaging/Eigen">
-        <img src="https://img.shields.io/website/https/github.com/build2-packaging/Eigen.svg?down_message=offline&label=build2&style=for-the-badge&up_color=blue&up_message=online">
-    </a>
-    <a href="https://cppget.org/Eigen">
-        <img src="https://img.shields.io/website/https/cppget.org/Eigen.svg?down_message=offline&label=cppget.org&style=for-the-badge&up_color=blue&up_message=online">
-    </a>
-    <a href="https://queue.cppget.org/Eigen">
-        <img src="https://img.shields.io/website/https/queue.cppget.org/Eigen.svg?down_message=empty&down_color=blue&label=queue.cppget.org&style=for-the-badge&up_color=orange&up_message=running">
-    </a>
-</p>
+[![Official](https://img.shields.io/website/https/eigen.tuxfamily.org/index.php.svg?down_message=offline&label=Official&style=for-the-badge&up_color=blue&up_message=online)](https://eigen.tuxfamily.org/index.php)
+[![build2](https://img.shields.io/website/https/github.com/build2-packaging/Eigen.svg?down_message=offline&label=build2&style=for-the-badge&up_color=blue&up_message=online)](https://github.com/build2-packaging/Eigen)
+[![cppget.org](https://img.shields.io/website/https/cppget.org/Eigen.svg?down_message=offline&label=cppget.org&style=for-the-badge&up_color=blue&up_message=online)](https://cppget.org/Eigen)
+[![queue.cppget.org](https://img.shields.io/website/https/queue.cppget.org/Eigen.svg?down_message=empty&down_color=blue&label=queue.cppget.org&style=for-the-badge&up_color=orange&up_message=running)](https://queue.cppget.org/Eigen)
 
 ## Usage
 Make sure to add the stable `cppget.org` repositories to your project's `repositories.manifest` to be able to fetch the packages.
@@ -30,9 +15,15 @@ Make sure to add the stable `cppget.org` repositories to your project's `reposit
     location: https://pkg.cppget.org/1/stable
     # trust: ...
 
+If the stable section of `cppget.org` is not an option then add this Git repository itself instead as a prerequisite.
+
+    :
+    role: prerequisite
+    location: https://github.com/build2-packaging/Eigen.git
+
 Add the respective dependency in your project's `manifest` file to make the package available for import.
 
-    depends: Eigen ^ 3.4.0
+    depends: Eigen ^3.4.0
 
 The header-only C++ library to use Eigen can be imported by the following declaration in a `buildfile`.
 
@@ -41,34 +32,17 @@ The header-only C++ library to use Eigen can be imported by the following declar
 ## Configuration
 
 ### Unsupported Modules
-The unsupported modules of the Eigen library can be enabled by setting the following configuration variable to `true`.
-In this case, the path to unsupported header files is automatically added to the include directories such that unsupported may be used as if they were supported Eigen modules.
+Eigen's unsupported modules can be enabled by setting the following configuration variable to `true`.
+In this case, the path to unsupported header files is automatically added to the include directories such that unsupported modules may be used as if they were supported Eigen modules.
 
     config [bool] config.Eigen.unsupported ?= false
 
+## Issues and Notes
+- Eigen is a header-only library that provides a [bunch of preprocessor directives](https://eigen.tuxfamily.org/dox/TopicPreprocessorDirectives.html) to configure its API and implementation. So far, these macros are not managed by configuration variables in build2. Consequently, the dependency negotiation during package consumption to ensure no API- or ABI-breaking changes across different projects, packages, and source files is not available. You need to make sure that all package consumers use the same library configuration and are provided with the same preprocessor directives.
+- Tests that require external dependencies have not been added so far.
+- Currently, CUDA is not supported by build2 and, thus, tests for CUDA are not included.
+
 ## Contributing
-Thanks in advance for your help and contribution to keep this package up-to-date.
-For now, please, file an issue on [GitHub](https://github.com/build2-packaging/Eigen/issues) for everything that is not described below.
-
-### Recommend Updating Version
-Please, file an issue on [GitHub](https://github.com/build2-packaging/Eigen/issues) with the new recommended version.
-
-### Update Version by Pull Request
-1. Fork the repository on [GitHub](https://github.com/build2-packaging/Eigen) and clone it to your local machine.
-2. Run `git submodule init` and `git submodule update` to get the current upstream directory.
-3. Inside the `upstream` directory, checkout the new library version `X.Y.Z` by calling `git checkout vX.Y.Z` that you want to be packaged.
-4. If needed, change source files, `buildfiles`, and symbolic links accordingly to create a working build2 package. Make sure not to directly depend on the upstream directory inside the build system but use symbolic links instead.
-5. Update library version in `manifest` file if it has changed or add package update by using `+n` for the `n`-th update.
-6. Make an appropriate commit message by using imperative mood and a capital letter at the start and push the new commit to the `master` branch.
-7. Run `bdep ci` and test for errors.
-8. If everything works fine, make a pull request on GitHub and write down the `bdep ci` link to your CI tests.
-9. After a successful pull request, we will run the appropriate commands to publish a new package version.
-
-### Update Version Directly if You Have Permissions
-1. Inside the `upstream` directory, checkout the new library version `X.Y.Z` by calling `git checkout vX.Y.Z` that you want to be packaged.
-2. If needed, change source files, `buildfiles`, and symbolic links accordingly to create a working build2 package. Make sure not to directly depend on the upstream directory inside the build system but use symbolic links instead.
-3. Update library version in `manifest` file if it has changed or add package update by using `+n` for the `n`-th update.
-4. Make an appropriate commit message by using imperative mood and a capital letter at the start and push the new commit to the `master` branch.
-5. Run `bdep ci` and test for errors and warnings.
-6. When successful, run `bdep release --tag --push` to push new tag version to repository.
-7. Run `bdep publish` to publish the package to [cppget.org](https://cppget.org).
+Thank you in advance for your help and contribution to keep this package up-to-date.
+Please, file an issue on [GitHub](https://github.com/build2-packaging/Eigen/issues) for questions, bug reports, or to recommend updating the package version.
+If you're making a pull request to fix bugs or update the package version yourself, refer to the [`build2` Packaging Guidelines](https://build2.org/build2-toolchain/doc/build2-toolchain-packaging.xhtml#core-version-management).

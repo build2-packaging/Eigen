@@ -1,0 +1,6 @@
+./: Eigen/
+
+# Run tests for unsupported modules only if package
+# was configured to make unsupported modules available.
+#
+./: unsupported/: include = $unsupported_modules

@@ -1,0 +1,45 @@
+# Capture all test headers for the unit testing framework.
+#
+headers = test/hxx{**}
+
+# Capture all unit test sources that
+# don't require external dependencies.
+#
+unittests = test/cxx{* \
+    -boostmultiprec \
+    -bug1213* \
+    -cholmod_support \
+    -eigen2support \
+    -klu_support \
+    -metis_support \
+    -pastix_support \
+    -pardiso_support \
+    -qtvector \
+    -spqr_support \
+    -superlu_support \
+    -umfpack_support \
+    -denseLM \
+    -sparseLM}
+
+# Create test executable for each unit test source.
+#
+for x: $unittests
+{
+  n = $name($x)
+  ./: exe{$n}: $x $headers $Eigen testscript
+}
+
+# Add test executable that differ in their compilation process.
+#
+./: exe{bug1213}: $headers test/cxx{bug1213 bug1213_main} $Eigen testscript
+#
+./: exe{denseLM}: include = $unsupported_modules
+exe{denseLM}: $headers test/cxx{denseLM} $Eigen testscript
+#
+./: exe{sparseLM}: include = $unsupported_modules
+exe{sparseLM}: $headers test/cxx{sparseLM} $Eigen testscript
+
+# Add required build options to make tests
+# compilable and execute every available test case.
+#
+cxx.poptions += -DEIGEN_TEST_MAX_SIZE=320 -DDEIGEN_TEST_PART_ALL
