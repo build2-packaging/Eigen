@@ -1,44 +1,44 @@
-# Eigen Library
-# The relative include paths of the unsupported modules
-# need to be kept valid and they should not pollute
-# the system's include folder with an 'unsupported' directory.
-# So, the Eigen library and the unsupported Eigen modules will
-# both be put in another directory 'Eigen'
-# in the system's include folder when installed.
+# Eigen's Core Headers
 #
-./: lib{Eigen}: Eigen/hxx{**. **.h}
-{
-  export.metadata = 1 Eigen
-  Eigen.unsupported = [bool] $config.Eigen.unsupported
+# Eigen uses files with and without extensions for its headers.
+# So, we must add patterns to match both conventions.
+#
+lib{Eigen}: Eigen/{hxx ixx}{**} Eigen/hxx{**.}
 
-  cxx.export.poptions =+ "-I$src_root"
-  cxx.pkgconfig.include = include/Eigen/
-}
+# Eigen's Unsupported Module Headers
 #
-cxx.poptions =+ "-I$src_root"
+# Since Eigen is a header-only library, we consider
+# all headers part of the library's source files.
+# This greatly simplifies the build system.
+# Users are unaffected unless they specifically
+# include Eigen's unsupported module headers.
 #
-Eigen/hxx{*}:
-{
-  install = include/Eigen/Eigen/
-  install.subdirs = true
-}
+lib{Eigen}: unsupported/Eigen/{hxx ixx}{**} unsupported/Eigen/hxx{**.}
 
-# Add unsupported modules when enabled.
+# Build and Export Options: Include Paths
 #
-lib{Eigen}: unsupported/Eigen/hxx{**. **.h}: include = $config.Eigen.unsupported
+# Eigen's design allows headers to be included in two ways, for example:
+#   #include <Eigen/Splines>
+#   #include <unsupported/Eigen/Splines>
 #
-if $config.Eigen.unsupported
+# We have to reflect this in the package's source layout and
+# provide both include paths to users of the library target.
+# We prioritize Eigen's core headers by listing them first.
+#
+poptions = "-I$src_base" "-I$src_base/unsupported"
+cxx.poptions =+ $poptions
+lib{Eigen}: cxx.export.poptions = $poptions
+
+# Installation
+#
+# The include path configuration must be preserved upon installation.
+# The generated pkg-config file (.pc) is configured to provide both
+# include paths, maintaining the same priority order defined above.
+#
+lib{Eigen}: cxx.pkgconfig.include = include/eigen3/ include/eigen3/unsupported/
+#
+{hxx ixx}{*}:
 {
-  cxx.poptions =+ "-I$src_root/unsupported"
-  lib{Eigen}:
-  {
-    cxx.export.poptions =+ "-I$src_root/unsupported"
-    cxx.pkgconfig.include =+ include/Eigen/unsupported/
-  }
-}
-#
-unsupported/hxx{*}:
-{
-  install = include/Eigen/unsupported/
+  install         = include/eigen3/
   install.subdirs = true
 }
