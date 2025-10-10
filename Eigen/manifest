@@ -1,24 +1,23 @@
 : 1
 name: Eigen
 version: 5.0.0-a.0.z
-summary: Eigen is a C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
-license: MPLv2, LGPLv2.1, BSD2
-license: MPLv2, LGPLv2.1
+type: lib,binless
+language: c++
+project: Eigen
+summary: C++ template library for linear algebra
 license: MPLv2
 
-# As the 'README.md' describes how to use the build2 package,
-# the description file should be this one
-# and not the official README.
-#
 description-file: README.md
-# description-file: UPSTREAM.README.md
+changes-file: CHANGELOG.md
 
 url: http://eigen.tuxfamily.org/
 src-url: https://gitlab.com/libeigen/eigen
-package-url: https://github.com/build2-packaging/eigen
+doc-url: https://libeigen.gitlab.io/docs/
 email: eigen@lists.tuxfamily.org
-package-email: lyrahgames@mailbox.org
-build-error-email: lyrahgames@mailbox.org
 
-depends: * build2 >= 0.15.0
-depends: * bpkg >= 0.15.0
+package-description-file: PACKAGE-README.md
+package-url: https://github.com/build2-packaging/Eigen
+package-email: packaging@build2.org
+
+depends: * build2 >= 0.17.0
+depends: * bpkg >= 0.17.0
