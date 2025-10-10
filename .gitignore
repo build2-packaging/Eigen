@@ -18,6 +18,7 @@
 #
 !*.md
 !COPYING*
+!LICENSE
 
 # Don't ignore default C++ file extensions.
 #
