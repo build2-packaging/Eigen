@@ -1,5 +1,14 @@
+# Uncomment to suppress warnings coming from external libraries.
+#
+#cxx.internal.scope = current
+
 cxx.std = latest
+
 using cxx
+
+hxx{*}: extension = h
+ixx{*}: extension = inc
+# cxx{*}: extension = cpp
 
 # Eigen is configurable from the outside by macros.
 # Hence, we assume headers to be not importable.
@@ -9,7 +18,3 @@ hxx{*}: cxx.importable = false
 # The test target for cross-testing (running tests under Wine, etc).
 #
 test.target = $cxx.target
-
-# Configuration
-#
-config [bool] config.Eigen.unsupported ?= false
