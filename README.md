@@ -1,74 +1,100 @@
-<h1 align="center">
-    build2 Package for Eigen
-</h1>
+# build2 Package Repository for Eigen
 
-<p align="center">
-    This project builds and defines the build2 package for Eigen.
-    Eigen is a C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
-</p>
+This is a [build2](https://build2.org) package repository for [Eigen](https://eigen.tuxfamily.org), a high-performance C++ template library for linear algebra, including matrices, vectors, numerical solvers, and related algorithms.
 
-<p align="center">
-    <a href="https://eigen.tuxfamily.org/index.php">
-        <img src="https://img.shields.io/website/https/eigen.tuxfamily.org/index.php.svg?down_message=offline&label=Official&style=for-the-badge&up_color=blue&up_message=online">
-    </a>
-    <a href="https://github.com/build2-packaging/Eigen">
-        <img src="https://img.shields.io/website/https/github.com/build2-packaging/Eigen.svg?down_message=offline&label=build2&style=for-the-badge&up_color=blue&up_message=online">
-    </a>
-    <a href="https://cppget.org/Eigen">
-        <img src="https://img.shields.io/website/https/cppget.org/Eigen.svg?down_message=offline&label=cppget.org&style=for-the-badge&up_color=blue&up_message=online">
-    </a>
-    <a href="https://queue.cppget.org/Eigen">
-        <img src="https://img.shields.io/website/https/queue.cppget.org/Eigen.svg?down_message=empty&down_color=blue&label=queue.cppget.org&style=for-the-badge&up_color=orange&up_message=running">
-    </a>
-</p>
+This repository is a community-maintained effort and is not officially endorsed by the Eigen authors.
+
+| Package | Summary | Status |
+|---|---|---|
+| **[`Eigen`](Eigen/PACKAGE-README.md)** | C++ Linear Algebra Library | [![cppget.org](https://img.shields.io/website/https/cppget.org/Eigen.svg?down_message=offline&label=cppget.org&style=for-the-badge&up_color=blue&up_message=online)](https://cppget.org/Eigen) [![queue.cppget.org](https://img.shields.io/website/https/queue.cppget.org/Eigen.svg?down_message=empty&down_color=blue&label=queue.cppget.org&style=for-the-badge&up_color=orange&up_message=running)](https://queue.cppget.org/Eigen) |
 
 ## Usage
-Make sure to add the stable `cppget.org` repositories to your project's `repositories.manifest` to be able to fetch the packages.
+If you want to use the Eigen package in your `build2`-based project, add an appropriate repository manifest to your project's `repositories.manifest` and refer to [Eigen's `PACKAGE-README`](Eigen/PACKAGE-README.md).
+
+### `repositories.manifest`
+To be able to fetch this repository's packages, add one of the following prerequisites to your project's `repositories.manifest`.
+
+**Option A: `cppget.org` (Recommended)**
+
+Based on your project's stability requirements, choose either the [`stable` section](https://cppget.org/?about#pkg%3Acppget.org%2Fstable) for thoroughly tested versions or the [`testing` section](https://cppget.org/?about#pkg%3Acppget.org%2Ftesting) for the latest releases before they are marked as stable.
+For example:
 
     :
     role: prerequisite
     location: https://pkg.cppget.org/1/stable
     # trust: ...
 
-Add the respective dependency in your project's `manifest` file to make the package available for import.
+**Option B: Git Repository**
 
-    depends: Eigen ^ 3.4.0
+    :
+    role: prerequisite
+    location: https://github.com/build2-packaging/Eigen.git
 
-The header-only C++ library to use Eigen can be imported by the following declaration in a `buildfile`.
+## Development Setup
+The development setup for this repository uses the standard `bdep`-based workflow.
+For general information and guidance on package maintenance, please see the [`build2` Documentation](https://build2.org/doc.xhtml).
 
-    import Eigen = Eigen%lib{Eigen}
+First, clone the repository via SSH or HTTPS.
 
-## Configuration
+    git clone --recurse https://github.com/build2-packaging/Eigen.git  # HTTPS
+    git clone --recurse git@github.com:build2-packaging/Eigen.git      # SSH
 
-### Unsupported Modules
-The unsupported modules of the Eigen library can be enabled by setting the following configuration variable to `true`.
-In this case, the path to unsupported header files is automatically added to the include directories such that unsupported may be used as if they were supported Eigen modules.
+Inside the repository's directory, initialize your build configuration.
 
-    config [bool] config.Eigen.unsupported ?= false
+    bdep init -C @gcc cc config.cxx=g++ config.install.root=../.install config.dist.root=../.dist
+
+Afterwards, use `b` or `bdep` to build, test, install, and distribute the packages.
+
+## Issues and Notes
+
+### Naming Scheme
+We currently use `Eigen%lib{Eigen}` for compatibility with older versions.
+However, this naming scheme is inconsistent with other package managers and Eigen's own internal logic (GitLab Repository: `libeigen/eigen`, pkgconfig: `eigen3`, `CMakeLists.txt`: `Eigen3::Eigen`).
+A more conventional name might be `libeigen3%lib{eigen}` or `libeigen%lib{eigen}`.
+Still, Eigen's upstream source code lacks a consistent naming convention and makes ideal names for the repository, package, and library target difficult to choose.
+Other package managers also provide their own naming convention (e.g., Arch Linux: `eigen`, Debian: `libeigen3-dev`).
+
+### Version Header Generation
+Eigen's sources already come with the generated version file `Eigen/Version`.
+Should there be any release in the future that does not provide the correct version header, we can generate it ourselves:
+
+Add symlink to the version header config file `upstream/cmake/Version.in`:
+```
+cd Eigen/eigen3/
+ln -s ../../upstream/cmake/Version.in
+```
+
+Generate version header in `buildfile`:
+```buildfile
+# Version Header
+# Generate intermediate file in this directory use it to
+# generate the version header in the `Eigen/` directory.
+#
+lib{Eigen}: Eigen/hxx{Version.}
+Eigen/hxx{Version.}: in{Version.in.in} $src_root/manifest
+{
+  in.symbol = '@'
+  EIGEN_MAJOR_VERSION = $version.major
+  EIGEN_MINOR_VERSION = $version.minor
+  EIGEN_PATCH_VERSION = $version.patch
+  EIGEN_VERSION_STRING = $version
+  EIGEN_PRERELEASE_VERSION = # Empty
+  EIGEN_BUILD_VERSION = # Empty
+}
+in{Version.in.in}: file{Version.in}
+{{
+  sed -e 's/\$\{(.+)\}/@\1@/g' $path($<) >$path($>)
+}}
+```
+
+Make sure to add the output directory as preprocessor include path:
+```buildfile
+poptions = "-I$out_base" "-I$src_base" "-I$src_base/unsupported"
+```
 
 ## Contributing
-Thanks in advance for your help and contribution to keep this package up-to-date.
-For now, please, file an issue on [GitHub](https://github.com/build2-packaging/Eigen/issues) for everything that is not described below.
-
-### Recommend Updating Version
-Please, file an issue on [GitHub](https://github.com/build2-packaging/Eigen/issues) with the new recommended version.
-
-### Update Version by Pull Request
-1. Fork the repository on [GitHub](https://github.com/build2-packaging/Eigen) and clone it to your local machine.
-2. Run `git submodule init` and `git submodule update` to get the current upstream directory.
-3. Inside the `upstream` directory, checkout the new library version `X.Y.Z` by calling `git checkout vX.Y.Z` that you want to be packaged.
-4. If needed, change source files, `buildfiles`, and symbolic links accordingly to create a working build2 package. Make sure not to directly depend on the upstream directory inside the build system but use symbolic links instead.
-5. Update library version in `manifest` file if it has changed or add package update by using `+n` for the `n`-th update.
-6. Make an appropriate commit message by using imperative mood and a capital letter at the start and push the new commit to the `master` branch.
-7. Run `bdep ci` and test for errors.
-8. If everything works fine, make a pull request on GitHub and write down the `bdep ci` link to your CI tests.
-9. After a successful pull request, we will run the appropriate commands to publish a new package version.
-
-### Update Version Directly if You Have Permissions
-1. Inside the `upstream` directory, checkout the new library version `X.Y.Z` by calling `git checkout vX.Y.Z` that you want to be packaged.
-2. If needed, change source files, `buildfiles`, and symbolic links accordingly to create a working build2 package. Make sure not to directly depend on the upstream directory inside the build system but use symbolic links instead.
-3. Update library version in `manifest` file if it has changed or add package update by using `+n` for the `n`-th update.
-4. Make an appropriate commit message by using imperative mood and a capital letter at the start and push the new commit to the `master` branch.
-5. Run `bdep ci` and test for errors and warnings.
-6. When successful, run `bdep release --tag --push` to push new tag version to repository.
-7. Run `bdep publish` to publish the package to [cppget.org](https://cppget.org).
+Contributions are welcome and greatly appreciated!
+Please start by [opening an issue](https://github.com/build2-packaging/Eigen/issues) to report a bug, suggest an improvement, or request a version update.
+This helps us coordinate efforts and avoid duplicate work.
+You are then welcome to submit a [pull request](https://github.com/build2-packaging/Eigen/pulls) that references the issue.
+For guidance on package maintenance, please see the [`build2` Packaging Guidelines](https://build2.org/build2-toolchain/doc/build2-toolchain-packaging.xhtml).
