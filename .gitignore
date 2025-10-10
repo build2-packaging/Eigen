@@ -46,3 +46,5 @@
 
 # Allow specific symbolic links to directories.
 #
+!Eigen/eigen3/Eigen
+!Eigen/eigen3/unsupported
