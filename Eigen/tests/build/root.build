@@ -2,8 +2,11 @@ cxx.std = latest
 
 using cxx
 
-hxx{*}: extension = hpp
+hxx{*}: extension = h
 cxx{*}: extension = cpp
-exe{*}: test = true
+
+hxx{*}: cxx.importable = false
 
 test.target = $cxx.target
+
+exe{*}: test = true
