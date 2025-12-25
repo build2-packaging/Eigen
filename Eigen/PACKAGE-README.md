@@ -8,7 +8,7 @@ To use this package in your project, add the following configurations to the res
 ### `manifest`
 To make Eigen available for import, add the following dependency to the `manifest` of each package in your project that requires it, adjusting the version constraint as appropriate.
 
-    depends: Eigen ^5.0.0
+    depends: Eigen ^5.0.1
 
 ### `buildfile`
 To import the library, use the following declaration in your `buildfile`.
