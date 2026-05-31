@@ -1,2 +1,4 @@
-./ : {*/ -build/} manifest doc{*.md} legal{COPYING*}
+./: eigen3/ tests/ manifest doc{*.md} doc/doc{**} legal{COPYING*}
 tests/: install = false
+
+doc{*}: install.subdirs = true

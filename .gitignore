@@ -17,6 +17,7 @@
 # Don't ignore license and documentation files.
 #
 !*.md
+!*.txt
 !COPYING*
 !LICENSE
 
