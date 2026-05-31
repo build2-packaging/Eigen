@@ -5,7 +5,7 @@ type: lib,binless
 language: c++
 project: Eigen
 summary: C++ template library for linear algebra
-license: MPLv2
+license: MPL-2.0, Apache-2.0, BSD-3-Clause, Minpack ; Primarily Mozilla Public License 2.0 and compatible licenses for some third-party code
 
 description-file: README.md
 changes-file: CHANGELOG.md
