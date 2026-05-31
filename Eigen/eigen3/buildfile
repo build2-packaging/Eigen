@@ -1,29 +1,26 @@
 # Eigen's Core Headers
 #
-# Eigen uses files with and without extensions for its headers.
-# So, we must add patterns to match both conventions.
+# Eigen uses headers with and without extensions and we must match both groups.
 #
 lib{Eigen}: Eigen/{hxx ixx}{**} Eigen/hxx{**.}
 
 # Eigen's Unsupported Module Headers
 #
-# Since Eigen is a header-only library, we consider
-# all headers part of the library's source files.
-# This greatly simplifies the build system.
-# Users are unaffected unless they specifically
-# include Eigen's unsupported module headers.
+# Eigen is header-only, so we treat every header as part of the library's
+# source, the unsupported modules included. This keeps the build simple and
+# has no effect on users unless they explicitly include an unsupported module.
 #
 lib{Eigen}: unsupported/Eigen/{hxx ixx}{**} unsupported/Eigen/hxx{**.}
 
 # Build and Export Options: Include Paths
 #
 # Eigen's design allows headers to be included in two ways, for example:
+#
 #   #include <Eigen/Splines>
 #   #include <unsupported/Eigen/Splines>
 #
-# We have to reflect this in the package's source layout and
-# provide both include paths to users of the library target.
-# We prioritize Eigen's core headers by listing them first.
+# We expose both search paths to ourselves and to dependents,
+# listing the core path first so it takes precedence.
 #
 poptions = "-I$src_base" "-I$src_base/unsupported"
 cxx.poptions =+ $poptions
@@ -31,9 +28,8 @@ lib{Eigen}: cxx.export.poptions = $poptions
 
 # Installation
 #
-# The include path configuration must be preserved upon installation.
-# The generated pkg-config file (.pc) is configured to provide both
-# include paths, maintaining the same priority order defined above.
+# Preserve the same two include paths, in the same priority order, after
+# installation by emitting them into the generated pkg-config (.pc) file.
 #
 lib{Eigen}: cxx.pkgconfig.include = include/eigen3/ include/eigen3/unsupported/
 #
