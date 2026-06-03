@@ -49,3 +49,5 @@
 #
 !Eigen/eigen3/Eigen
 !Eigen/eigen3/unsupported
+!Eigen/tests/test
+!Eigen/tests/unsupported/test

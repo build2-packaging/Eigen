@@ -10,3 +10,5 @@ hxx{*}: cxx.importable = false
 test.target = $cxx.target
 
 exe{*}: test = true
+
+import eigen = Eigen%lib{Eigen}

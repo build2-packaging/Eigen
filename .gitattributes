@@ -22,3 +22,5 @@
 #
 Eigen/eigen3/Eigen symlink=dir
 Eigen/eigen3/unsupported symlink=dir
+Eigen/tests/test symlink=dir
+Eigen/tests/unsupported/test symlink=dir

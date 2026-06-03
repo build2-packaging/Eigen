@@ -1,0 +1,29 @@
+unsupported_tests =           \
+alignedvector3                \
+autodiff_1                    \
+autodiff_scalar_1             \
+bessel_functions_1            \
+BVH_1                         \
+BVH_2                         \
+BVH_3                         \
+EulerAngles_1                 \
+kronecker_product_1           \
+kronecker_product_2           \
+matrix_square_root_1          \
+minres_2                      \
+NumericalDiff                 \
+polynomialsolver_1            \
+sparse_extra_4                \
+special_functions_1           \
+special_packetmath_1
+
+for t: $unsupported_tests
+{
+  m = $regex.match($t, '(.+?)(?:_([0-9]+))?', return_subs)
+  n = ($m[0])
+  p = ($m[1] != "" ? $m[1] : "ALL")
+
+  obj{$t}: test/cxx{$n} $eigen
+  obj{$t}: cxx.poptions += "-DEIGEN_TEST_PART_$p=1"
+  ./: exe{$t}: obj{$t} $eigen ../testscript
+}
